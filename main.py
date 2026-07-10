@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
+from predict import predict_output, model
 
 app = FastAPI()
 
