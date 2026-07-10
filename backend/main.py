@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from predict import predict_output, model
+from predict import predict_message, model
 from schema.user_input import UserInput
 from schema.prediction_response import PredictionResponse
 
@@ -16,7 +16,7 @@ def predict(data: UserInput):
 
     try:
 
-        prediction = predict_output(data)
+        prediction = predict_message(data.message)
 
         return {"prediction": prediction}
     except Exception as e:

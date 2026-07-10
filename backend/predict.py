@@ -3,45 +3,45 @@ import pandas as pd
 import re
 from scipy.sparse import hstack
 
-# Load saved model and vectorizer
+# Load model and vectorizer
 model = joblib.load("model.pkl")
 vectorizer = joblib.load("vectorizer.pkl")
 
 
-def create_features(message):
-    """Create the same features used during training."""
-
+def create_features(message: str):
     df = pd.DataFrame({"Message": [message]})
 
     df["message_length"] = df["Message"].apply(len)
     df["word_count"] = df["Message"].apply(lambda x: len(x.split()))
     df["has_currency"] = df["Message"].apply(
-        lambda x: 1 if re.search(r'[$£€¥]', x) else 0
+        lambda x: 1 if re.search(r"[$£€¥]", x) else 0
     )
     df["has_numbers"] = df["Message"].apply(
-        lambda x: 1 if re.search(r'\d', x) else 0
+        lambda x: 1 if re.search(r"\d", x) else 0
     )
     df["has_special_chars"] = df["Message"].apply(
-        lambda x: 1 if re.search(r'[!@#$%^&*()]', x) else 0
+        lambda x: 1 if re.search(r"[!@#$%^&*()]", x) else 0
     )
     df["has_urgent_words"] = df["Message"].apply(
-        lambda x: 1 if re.search(
-            r'\b(urgent|free|prize|winner|cash|guarantee)\b',
-            x.lower()
-        ) else 0
+        lambda x: 1
+        if re.search(
+            r"\b(urgent|free|prize|winner|cash|guarantee)\b",
+            x.lower(),
+        )
+        else 0
     )
 
     return df
 
 
-def predict_message(message):
-    # Create additional features
+def predict_message(message: str):
+    # Create features
     df = create_features(message)
 
-    # Convert text to TF-IDF
+    # TF-IDF features
     text_features = vectorizer.transform(df["Message"])
 
-    # Numerical features
+    # Additional features
     extra_features = df[
         [
             "message_length",
@@ -53,36 +53,21 @@ def predict_message(message):
         ]
     ]
 
-    # Combine TF-IDF and numerical features
+    # Combine features
     X = hstack((text_features, extra_features))
 
     # Predict
     prediction = model.predict(X)[0]
 
-    # Probability (if supported)
-    probability = None
+    # Confidence
+    confidence = None
     if hasattr(model, "predict_proba"):
-        probability = model.predict_proba(X).max()
+        confidence = float(model.predict_proba(X).max())
 
-    return prediction, probability
+    # Label
+    label = "SPAM" if prediction in [1, "spam", "Spam"] else "NOT SPAM"
 
-
-if __name__ == "__main__":
-
-    while True:
-        message = input("\nEnter Message (or type 'exit'): ")
-
-        if message.lower() == "exit":
-            break
-
-        prediction, probability = predict_message(message)
-
-        if prediction in [1, "spam", "Spam"]:
-            label = "SPAM"
-        else:
-            label = "NOT SPAM"
-
-        print(f"\nPrediction : {label}")
-
-        if probability is not None:
-            print(f"Confidence : {probability:.2%}")
+    return {
+        "prediction": label,
+        "confidence": confidence,
+    }
