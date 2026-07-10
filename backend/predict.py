@@ -67,7 +67,7 @@ def predict_message(message: str):
         confidence = float(model.predict_proba(X).max())
 
     # Label
-    label = "SPAM" if prediction in [1, "spam", "Spam"] else "NOT SPAM"
+    label = "SPAM" if prediction in [0, "spam", "Spam"] else "NOT SPAM"
 
     return {
         "prediction": label,
