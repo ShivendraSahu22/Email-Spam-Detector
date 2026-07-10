@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from predict import predict_output, model
 from schema.user_input import UserInput
+from schema.prediction_response import PredictionResponse
 
 app = FastAPI()
 
