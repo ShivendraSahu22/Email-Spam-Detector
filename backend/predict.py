@@ -80,7 +80,7 @@ if __name__ == "__main__":
         if prediction in [1, "spam", "Spam"]:
             label = "SPAM"
         else:
-            label = "HAM"
+            label = "NOT SPAM"
 
         print(f"\nPrediction : {label}")
 
