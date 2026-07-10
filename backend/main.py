@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from predict import predict_output, model
 from schema.user_input import UserInput
@@ -20,4 +20,4 @@ def predict(data: UserInput):
 
         return {"prediction": prediction}
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=str(e)) from e
