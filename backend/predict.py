@@ -2,10 +2,12 @@ import joblib
 import pandas as pd
 import re
 from scipy.sparse import hstack
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pickle
 
 # Load model and vectorizer
-model = joblib.load("model.pkl")
-vectorizer = joblib.load("vectorizer.pkl")
+model = joblib.load("model/spam_model.pkl")
+vectorizer = joblib.load("model/vectorizer.pkl")
 
 
 def create_features(message: str):

@@ -11,13 +11,9 @@ app = FastAPI()
 def health_check():
     return {"status": "ok"}
 
-@app.post("/predict", response_model = PredictionResponse)
+@app.post("/predict", response_model=PredictionResponse)
 def predict(data: UserInput):
-
     try:
-
-        prediction = predict_message(data.message)
-
-        return {"prediction": prediction}
+        return predict_message(data.message)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise HTTPException(status_code=500, detail=str(e))
