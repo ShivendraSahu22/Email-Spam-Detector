@@ -78,7 +78,7 @@ def create_features(message: str):
         else 0
     )
 
-    return df
+    return df 
 
 
 def predict_message(message: str):
