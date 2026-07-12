@@ -80,7 +80,6 @@ def create_features(message: str):
 
     return df 
 
-
 def predict_message(message: str):
     """
     Predict whether a message is spam.
