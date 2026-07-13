@@ -106,7 +106,7 @@ def predict_message(message: str):
             "has_urgent_words",
         ]
     ]
-
+    
     # Combine
     X = hstack((text_features, extra_features))
 
