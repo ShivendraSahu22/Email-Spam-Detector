@@ -106,7 +106,7 @@ def predict_message(message: str):
             "has_urgent_words",
         ]
     ]
-    
+
     # Combine
     X = hstack((text_features, extra_features))
 
@@ -145,3 +145,4 @@ if __name__ == "__main__":
 
         print("\nPrediction :", result["prediction"])
         print("Confidence :", result["confidence"])
+        
