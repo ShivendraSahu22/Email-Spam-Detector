@@ -145,4 +145,4 @@ if __name__ == "__main__":
 
         print("\nPrediction :", result["prediction"])
         print("Confidence :", result["confidence"])
-        
+     
